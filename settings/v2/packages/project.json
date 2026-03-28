@@ -1,0 +1,15 @@
+{
+  "__version__": "1.0.6",
+  "general": {
+    "designResolution": {
+      "width": 1334,
+      "height": 750
+    }
+  },
+  "layer": [
+    {
+      "name": "GameElement",
+      "value": 524288
+    }
+  ]
+}
