@@ -34,13 +34,12 @@ export class MapManager extends Component {
   }
 
   start() {
-    this.loadAtlas();
   }
 
   update(deltaTime: number) {}
 
-  tileWidth = 190;
-  tileHeight = 115;
+  tileWidth = 190*2;
+  tileHeight = 115*2;
 
   //地图尺寸  200x149
 
@@ -53,64 +52,90 @@ export class MapManager extends Component {
     return this._mapSprites;
   }
 
-  loadAtlas() {
-    assetManager.loadBundle("netRes", (err, bundle) => {
-      bundle.load(
-        "atlas/ground/isometric_grass_normal",
-        SpriteAtlas,
-        (err, atlas) => {
-          this.generateMap(atlas);
-
-          console.log("加载成功");
-        }
-      );
-    });
-  }
 
   generateMap(atlas) {
-    //地形层
-    var ground = this.node.getChildByName("GroundNode");
-    var gridPrefb = GameManager.Instance.prefabMap["Grid"];
-
-    for (let x = 0; x < this.mapWidth; x++) {
-      this._mapSprites[x] = new Array<Grid>(this.mapHeight); // 每行一个数组
-      for (let y = 0; y < this.mapHeight; y++) {
-        let tileNode = instantiate(gridPrefb);
-        var grid = tileNode.getComponent(Grid);
-        //标记索引
-        grid.gridIndex = new Vec2(x, y);
-        let sprite = tileNode.getComponent(Sprite);
-        //设置到数值
-        this._mapSprites[x][y] = grid;
-        //设置元素默认不是UI层
-        tileNode.layer = Layers.Enum.DEFAULT;
-
-        var randex = math.randomRangeInt(1, 9);
-        // 图集里的名字
-        sprite.spriteFrame = atlas.getSpriteFrame(
-          "isometric_grass_normal_tileset_0" + randex
-        );
-
-        // 👉 坐标转换
-        let posX = ((x - y) * this.tileWidth) / 2;
-        let posY = ((x + y) * this.tileHeight) / 2;
-
-        tileNode.setPosition(posX, -posY); // 注意Y轴反向
-
-        ground.addChild(tileNode);
-        //展示索引
-        grid.showIndexLabel(true);
-      }
+    if (!atlas) {
+        console.error("generateMap: atlas is undefined!");
+        return;
     }
 
-    // //设置镜头Charactor和镜头的初始位置
-    var CenerIndex = new Vec2(
-      Math.floor(this.mapWidth / 2),
-      Math.floor(this.mapHeight / 2)
-    );
-    var _firstPos = this._mapSprites[0][0].node.position;
-    var CenterPos = this._mapSprites[CenerIndex.x][CenerIndex.y].node.position;
-    GameManager.Instance.initSpawn(CenterPos, _firstPos);
+    // 地形层
+    const ground = this.node.getChildByName("GroundNode");
+    if (!ground) {
+        console.error("generateMap: GroundNode not found!");
+        return;
+    }
 
-  }
+    const gridPrefb = GameManager.Instance?.prefabMap?.["Grid"];
+    if (!gridPrefb) {
+        console.error("generateMap: Grid prefab not loaded!");
+        return;
+    }
+
+    this._mapSprites = [];
+
+    for (let x = 0; x < this.mapWidth; x++) {
+        this._mapSprites[x] = [];
+        for (let y = 0; y < this.mapHeight; y++) {
+            const tileNode = instantiate(gridPrefb);
+            if (!tileNode) {
+                console.warn(`instantiate failed at ${x},${y}`);
+                continue;
+            }
+
+            const grid = tileNode.getComponent(Grid);
+            if (!grid) {
+                console.warn(`Grid component missing at ${x},${y}`);
+                continue;
+            }
+
+            grid.gridIndex = new Vec2(x, y);
+
+            const sprite = tileNode.getComponent(Sprite);
+            if (!sprite) {
+                console.warn(`Sprite component missing at ${x},${y}`);
+            } else {
+                const randex = math.randomRangeInt(1, 9);
+                const frameName = "isometric_grass_normal_tileset_0" + randex;
+                const spriteFrame = atlas.getSpriteFrame(frameName);
+                if (!spriteFrame) {
+                    console.warn(`SpriteFrame not found: ${frameName}`);
+                } else {
+                    sprite.spriteFrame = spriteFrame;
+                }
+            }
+
+            // 坐标转换
+            const posX = ((x - y) * this.tileWidth) / 2;
+            const posY = ((x + y) * this.tileHeight) / 2;
+            tileNode.setPosition(posX, -posY);
+
+            tileNode.layer = Layers.Enum.DEFAULT;
+            ground.addChild(tileNode);
+
+            grid.showIndexLabel(true);
+            this._mapSprites[x][y] = grid;
+        }
+    }
+
+    // 设置镜头 Character 和初始位置
+    const CenerIndex = new Vec2(
+        Math.floor(this.mapWidth / 2),
+        Math.floor(this.mapHeight / 2)
+    );
+
+    const _firstGrid = this._mapSprites[0]?.[0];
+    const centerGrid = this._mapSprites[CenerIndex.x]?.[CenerIndex.y];
+
+    console.log("CenerIndex:",CenerIndex);
+    
+
+    if (!_firstGrid || !centerGrid) {
+        console.error("generateMap: invalid _mapSprites grid!");
+        return;
+    }
+
+    var smoothVec=new Vec3(centerGrid.node.position.x,centerGrid.node.position.y-100,0)
+    GameManager.Instance.initSpawn(centerGrid.node.position);
+}
 }

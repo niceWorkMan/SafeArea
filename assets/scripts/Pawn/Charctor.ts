@@ -21,7 +21,7 @@ export class Charctor extends BasePawn {
 
   cameraNode: Node = null;
 
-  public _offsetPos: Vec3 = null;
+  public _spawnPos: Vec3 = null;
 
   private joystick: any;
   start() {
@@ -33,7 +33,7 @@ export class Charctor extends BasePawn {
 
     //设置镜头初始位置
     this.cameraNode.setWorldPosition(
-      this.node.worldPosition.add(this._offsetPos)
+      this.node.worldPosition.add(this._spawnPos)
     );
   }
 

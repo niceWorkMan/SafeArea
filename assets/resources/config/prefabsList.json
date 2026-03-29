@@ -1,5 +1,5 @@
 [
     "prefab/mainCamera", 
     "prefab/pawn/userCharactor",
-    "prefab/Grid/Grid"
+    "prefab/Grid"
 ]

@@ -11,10 +11,12 @@ import {
   Node,
   Prefab,
   resources,
+  SpriteAtlas,
   Vec2,
   Vec3,
 } from "cc";
 import { Charctor } from "./Pawn/Charctor";
+import { MapManager } from "./MapManager";
 const { ccclass, property } = _decorator;
 
 @ccclass("GameManager")
@@ -42,8 +44,28 @@ export class GameManager extends Component {
     this.prefabPaths = prifabPathAsset.json;
     //加载bund
     const bundleUrl = "netRes";
-    const bundle = await this.loadBundle(bundleUrl);
+    // 1. 加载 bundle
+    const bundle = await this.loadAllBundle("netRes");
     this.netResBundle = bundle;
+
+    // 2. 加载 atlas
+    const atlas: SpriteAtlas = await new Promise((resolve, reject) => {
+      bundle.load(
+        "atlas/ground/isometric_grass_normal",
+        SpriteAtlas,
+        (err, atlas) => {
+          if (err) reject(err);
+          else {
+            resolve(atlas);
+            console.log("加载成功");
+          }
+        }
+      );
+    });
+
+    // 3. prefab 已经加载完成，atlas 也准备好了，可以生成地图
+    console.log("加载地图22");
+    MapManager.Instance.generateMap(atlas);
 
     //执行加载完所有东西后执行初始化
     this.initGame();
@@ -53,13 +75,12 @@ export class GameManager extends Component {
     //this.initSpawn(new Vec2())
   }
 
-
   /**
-   * 
+   *
    * @param spawnPos 人物生成格子位置
    * @param orginPos 屏幕中心 00位置
    */
-  public initSpawn(spawnPos: Vec3, orginPos: Vec3) {
+  public initSpawn(spawnPos: Vec3) {
     //地形层
     var c_layer = this.node.getChildByName("PawnActNode");
     console.log(
@@ -72,11 +93,9 @@ export class GameManager extends Component {
     c_layer.addChild(userCha);
     userCha.setPosition(Vec3.ZERO);
 
-    var offsetPos=new Vec3(spawnPos.x-orginPos.x,spawnPos.y-orginPos.y,0);
-
     //设置差量位置 等待charator start函数处理
     var charctor = userCha.getComponent(Charctor);
-    charctor._offsetPos = offsetPos;
+    charctor._spawnPos = spawnPos;
   }
 
   update(deltaTime: number) {}
@@ -124,10 +143,14 @@ export class GameManager extends Component {
     });
   }
 
-  private async loadBundle(name: string): Promise<AssetManager.Bundle> {
+  /**
+   * 加载所有任务
+   * @param name 
+   * @returns 
+   */
+  private async loadAllBundle(name: string): Promise<AssetManager.Bundle> {
     try {
       const bundle = await this.loadBundleAsync(name);
-
       // 合并所有加载操作：prefab 和 animation clip
       const loadTasks: Promise<void>[] = [
         ...this.prefabPaths.map((path) => this.loadPrefabAsync(bundle, path)),
