@@ -2,6 +2,7 @@ import {
   _decorator,
   assetManager,
   Component,
+  instantiate,
   Layers,
   log,
   math,
@@ -9,7 +10,11 @@ import {
   resources,
   Sprite,
   SpriteAtlas,
+  Vec2,
+  Vec3,
 } from "cc";
+import { GameManager } from "./GameManager";
+import { Grid } from "./Grid/Grid";
 const { ccclass, property } = _decorator;
 
 @ccclass("MapManager")
@@ -39,8 +44,14 @@ export class MapManager extends Component {
 
   //地图尺寸  200x149
 
-  mapWidth = 10;
-  mapHeight = 10;
+  mapWidth = 20;
+  mapHeight = 20;
+
+  //草地渲染网格
+  private _mapSprites: Grid[][] = [];
+  public get mapSprites(): Grid[][] {
+    return this._mapSprites;
+  }
 
   loadAtlas() {
     assetManager.loadBundle("netRes", (err, bundle) => {
@@ -59,16 +70,23 @@ export class MapManager extends Component {
   generateMap(atlas) {
     //地形层
     var ground = this.node.getChildByName("GroundNode");
+    var gridPrefb = GameManager.Instance.prefabMap["Grid"];
 
     for (let x = 0; x < this.mapWidth; x++) {
+      this._mapSprites[x] = new Array<Grid>(this.mapHeight); // 每行一个数组
       for (let y = 0; y < this.mapHeight; y++) {
-        let tileNode = new Node();
-        let sprite = tileNode.addComponent(Sprite);
+        let tileNode = instantiate(gridPrefb);
+        var grid = tileNode.getComponent(Grid);
+        //标记索引
+        grid.gridIndex = new Vec2(x, y);
+        let sprite = tileNode.getComponent(Sprite);
+        //设置到数值
+        this._mapSprites[x][y] = grid;
         //设置元素默认不是UI层
         tileNode.layer = Layers.Enum.DEFAULT;
 
         var randex = math.randomRangeInt(1, 9);
-        // 👉 图集里的名字
+        // 图集里的名字
         sprite.spriteFrame = atlas.getSpriteFrame(
           "isometric_grass_normal_tileset_0" + randex
         );
@@ -80,7 +98,19 @@ export class MapManager extends Component {
         tileNode.setPosition(posX, -posY); // 注意Y轴反向
 
         ground.addChild(tileNode);
+        //展示索引
+        grid.showIndexLabel(true);
       }
     }
+
+    // //设置镜头Charactor和镜头的初始位置
+    var CenerIndex = new Vec2(
+      Math.floor(this.mapWidth / 2),
+      Math.floor(this.mapHeight / 2)
+    );
+    var _firstPos = this._mapSprites[0][0].node.position;
+    var CenterPos = this._mapSprites[CenerIndex.x][CenerIndex.y].node.position;
+    GameManager.Instance.initSpawn(CenterPos, _firstPos);
+
   }
 }

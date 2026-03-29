@@ -4,13 +4,17 @@ import {
   assetManager,
   AssetManager,
   Component,
+  director,
   instantiate,
   JsonAsset,
+  log,
   Node,
   Prefab,
   resources,
+  Vec2,
   Vec3,
 } from "cc";
+import { Charctor } from "./Pawn/Charctor";
 const { ccclass, property } = _decorator;
 
 @ccclass("GameManager")
@@ -46,10 +50,16 @@ export class GameManager extends Component {
   }
 
   private initGame() {
-    this.initSpawn();
+    //this.initSpawn(new Vec2())
   }
 
-  private initSpawn() {
+
+  /**
+   * 
+   * @param spawnPos 人物生成格子位置
+   * @param orginPos 屏幕中心 00位置
+   */
+  public initSpawn(spawnPos: Vec3, orginPos: Vec3) {
     //地形层
     var c_layer = this.node.getChildByName("PawnActNode");
     console.log(
@@ -60,7 +70,13 @@ export class GameManager extends Component {
 
     var userCha = instantiate(this.prefabMap["userCharactor"]);
     c_layer.addChild(userCha);
-    userCha.setPosition(new Vec3(0, 0, 0));
+    userCha.setPosition(Vec3.ZERO);
+
+    var offsetPos=new Vec3(spawnPos.x-orginPos.x,spawnPos.y-orginPos.y,0);
+
+    //设置差量位置 等待charator start函数处理
+    var charctor = userCha.getComponent(Charctor);
+    charctor._offsetPos = offsetPos;
   }
 
   update(deltaTime: number) {}

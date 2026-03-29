@@ -5,6 +5,7 @@ import {
   instantiate,
   log,
   Node,
+  Vec2,
   Vec3,
 } from "cc";
 import { BasePawn } from "./BasePawn";
@@ -20,6 +21,8 @@ export class Charctor extends BasePawn {
 
   cameraNode: Node = null;
 
+  public _offsetPos: Vec3 = null;
+
   private joystick: any;
   start() {
     const scene = director.getScene();
@@ -27,6 +30,11 @@ export class Charctor extends BasePawn {
     this.joystick = UIManager.Instance.node
       .getChildByName("Joystick")
       .getComponent("Joystick");
+
+    //设置镜头初始位置
+    this.cameraNode.setWorldPosition(
+      this.node.worldPosition.add(this._offsetPos)
+    );
   }
 
   update(deltaTime: number) {
@@ -46,7 +54,7 @@ export class Charctor extends BasePawn {
         0
       );
       // Player 和 Charactor 移动
-      this.cameraNode.setWorldPosition(this.cameraNode.worldPosition.add(move));
+      this.cameraNode.setWorldPosition(this.node.worldPosition.add(move));
     }
   }
 
