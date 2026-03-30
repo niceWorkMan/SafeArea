@@ -14,10 +14,13 @@ import { GameManager } from "../GameManager";
 const { ccclass, property } = _decorator;
 
 @ccclass("Charctor")
+/**
+ * 当前预制体一定要设置成default 不能使用2d_UI
+ */
 export class Charctor extends BasePawn {
   @property(Node)
   joystickNode: Node = null;
-  speed = 200;
+  speed = 500;
 
   cameraNode: Node = null;
 
@@ -35,6 +38,8 @@ export class Charctor extends BasePawn {
     this.cameraNode.setWorldPosition(
       this.node.worldPosition.add(this._spawnPos)
     );
+    //设置
+    this.node.position = this._spawnPos
   }
 
   update(deltaTime: number) {
@@ -53,10 +58,12 @@ export class Charctor extends BasePawn {
         dir.y * this.speed * deltaTime,
         0
       );
-      // Player 和 Charactor 移动
-      this.cameraNode.setWorldPosition(this.node.worldPosition.add(move));
+      //更新pawn移动
+      this.node.position = this.node.position.clone().add(move)
+      //更新相机移动(to do 后面做缓动动画)
+      this.cameraNode.worldPosition = this.node.worldPosition;
     }
   }
 
-  protected lateUpdate(deltaTime: number) {}
+  protected lateUpdate(deltaTime: number) { }
 }
