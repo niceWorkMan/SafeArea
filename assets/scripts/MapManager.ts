@@ -37,8 +37,8 @@ export class MapManager extends Component {
 
   update(deltaTime: number) {}
 
-  tileWidth = 200 * 2;
-  tileHeight = 100 * 2;
+  tileWidth = 200;
+  tileHeight = 100;
 
   //地图尺寸  200x149
 
@@ -111,7 +111,7 @@ export class MapManager extends Component {
         tileNode.layer = Layers.Enum.DEFAULT;
         ground.addChild(tileNode);
 
-        grid.showIndexLabel(true);
+        //grid.showIndexLabel(true);
         this._mapSprites[x][y] = grid;
       }
     }
