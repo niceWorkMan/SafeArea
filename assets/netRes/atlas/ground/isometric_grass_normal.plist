@@ -4,161 +4,122 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>isometric_grass_normal_tileset_01.png</key>
+            <key>isometric_grass_tileset_01.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{204,757},{200,149}}</string>
+                <string>{{1686,6},{200,100}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{200,149}}</string>
+                <string>{{0,0},{200,100}}</string>
                 <key>sourceSize</key>
-                <string>{200,149}</string>
+                <string>{200,100}</string>
             </dict>
-            <key>isometric_grass_normal_tileset_02.png</key>
+            <key>isometric_grass_tileset_02.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,757},{200,149}}</string>
+                <string>{{1476,6},{200,100}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{200,149}}</string>
+                <string>{{0,0},{200,100}}</string>
                 <key>sourceSize</key>
-                <string>{200,149}</string>
+                <string>{200,100}</string>
             </dict>
-            <key>isometric_grass_normal_tileset_03.png</key>
+            <key>isometric_grass_tileset_03.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{204,606},{200,149}}</string>
+                <string>{{1266,6},{200,100}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{200,149}}</string>
+                <string>{{0,0},{200,100}}</string>
                 <key>sourceSize</key>
-                <string>{200,149}</string>
+                <string>{200,100}</string>
             </dict>
-            <key>isometric_grass_normal_tileset_04.png</key>
+            <key>isometric_grass_tileset_04.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,606},{200,149}}</string>
+                <string>{{1056,6},{200,100}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{200,149}}</string>
+                <string>{{0,0},{200,100}}</string>
                 <key>sourceSize</key>
-                <string>{200,149}</string>
+                <string>{200,100}</string>
             </dict>
-            <key>isometric_grass_normal_tileset_05.png</key>
+            <key>isometric_grass_tileset_05.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{204,455},{200,149}}</string>
+                <string>{{846,6},{200,100}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{200,149}}</string>
+                <string>{{0,0},{200,100}}</string>
                 <key>sourceSize</key>
-                <string>{200,149}</string>
+                <string>{200,100}</string>
             </dict>
-            <key>isometric_grass_normal_tileset_06.png</key>
+            <key>isometric_grass_tileset_06.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,455},{200,149}}</string>
+                <string>{{636,6},{200,100}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{200,149}}</string>
+                <string>{{0,0},{200,100}}</string>
                 <key>sourceSize</key>
-                <string>{200,149}</string>
+                <string>{200,100}</string>
             </dict>
-            <key>isometric_grass_normal_tileset_07.png</key>
+            <key>isometric_grass_tileset_07.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{204,304},{200,149}}</string>
+                <string>{{426,6},{200,100}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{200,149}}</string>
+                <string>{{0,0},{200,100}}</string>
                 <key>sourceSize</key>
-                <string>{200,149}</string>
+                <string>{200,100}</string>
             </dict>
-            <key>isometric_grass_normal_tileset_08.png</key>
+            <key>isometric_grass_tileset_08.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,304},{200,149}}</string>
+                <string>{{216,6},{200,100}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{200,149}}</string>
+                <string>{{0,0},{200,100}}</string>
                 <key>sourceSize</key>
-                <string>{200,149}</string>
+                <string>{200,100}</string>
             </dict>
-            <key>isometric_grass_normal_tileset_09.png</key>
+            <key>isometric_grass_tileset_09.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{204,153},{200,149}}</string>
+                <string>{{6,6},{200,100}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{200,149}}</string>
+                <string>{{0,0},{200,100}}</string>
                 <key>sourceSize</key>
-                <string>{200,149}</string>
-            </dict>
-            <key>isometric_grass_normal_tileset_10.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,153},{200,149}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{200,149}}</string>
-                <key>sourceSize</key>
-                <string>{200,149}</string>
-            </dict>
-            <key>isometric_grass_normal_tileset_11.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{204,2},{200,149}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{200,149}}</string>
-                <key>sourceSize</key>
-                <string>{200,149}</string>
-            </dict>
-            <key>isometric_grass_normal_tileset_12.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,2},{200,149}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{200,149}}</string>
-                <key>sourceSize</key>
-                <string>{200,149}</string>
+                <string>{200,100}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -168,9 +129,9 @@
             <key>realTextureFileName</key>
             <string>isometric_grass_normal.png</string>
             <key>size</key>
-            <string>{512,1024}</string>
+            <string>{2048,2048}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:a0ca141a090f95d4b98291f5c5b784b1:daef7342397b86d62d5c1d84ffc1f8f5:cf2d1062f120e836a94e6691187793fa$</string>
+            <string>$TexturePacker:SmartUpdate:8937bfa95a8cec57a604ce872c4090a9:666255c19fd13a986dde0f045825811f:cf2d1062f120e836a94e6691187793fa$</string>
             <key>textureFileName</key>
             <string>isometric_grass_normal.png</string>
         </dict>

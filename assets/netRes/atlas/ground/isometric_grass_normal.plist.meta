@@ -2,29 +2,28 @@
   "ver": "1.0.8",
   "importer": "sprite-atlas",
   "imported": true,
-  "uuid": "109abecd-425d-4cd3-bf79-2139a70a4781",
+  "uuid": "e02aab21-5022-49cf-8f11-5df17291e314",
   "files": [
     ".json"
   ],
   "subMetas": {
-    "23253": {
+    "1481f": {
       "importer": "sprite-frame",
-      "uuid": "109abecd-425d-4cd3-bf79-2139a70a4781@23253",
+      "uuid": "e02aab21-5022-49cf-8f11-5df17291e314@1481f",
       "displayName": "",
-      "id": "23253",
-      "name": "isometric_grass_normal_tileset_10",
+      "id": "1481f",
+      "name": "isometric_grass_tileset_01",
       "userData": {
-        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
         "offsetY": 0,
-        "trimX": 2,
-        "trimY": 153,
+        "trimX": 1686,
+        "trimY": 6,
         "width": 200,
-        "height": 149,
+        "height": 100,
         "rawWidth": 200,
-        "rawHeight": 149,
+        "rawHeight": 100,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -43,8 +42,9 @@
           "maxPos": []
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "8ac1926a-526f-4ab1-82b8-c3b02560f146@6c48a",
-        "atlasUuid": "109abecd-425d-4cd3-bf79-2139a70a4781"
+        "imageUuidOrDatabaseUri": "3c04d65e-6f3f-47ed-aeec-18e5af995721@6c48a",
+        "atlasUuid": "e02aab21-5022-49cf-8f11-5df17291e314",
+        "trimType": "auto"
       },
       "ver": "1.0.12",
       "imported": true,
@@ -53,24 +53,23 @@
       ],
       "subMetas": {}
     },
-    "43637": {
+    "bdf57": {
       "importer": "sprite-frame",
-      "uuid": "109abecd-425d-4cd3-bf79-2139a70a4781@43637",
+      "uuid": "e02aab21-5022-49cf-8f11-5df17291e314@bdf57",
       "displayName": "",
-      "id": "43637",
-      "name": "isometric_grass_normal_tileset_06",
+      "id": "bdf57",
+      "name": "isometric_grass_tileset_02",
       "userData": {
-        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
         "offsetY": 0,
-        "trimX": 2,
-        "trimY": 455,
+        "trimX": 1476,
+        "trimY": 6,
         "width": 200,
-        "height": 149,
+        "height": 100,
         "rawWidth": 200,
-        "rawHeight": 149,
+        "rawHeight": 100,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -89,8 +88,9 @@
           "maxPos": []
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "8ac1926a-526f-4ab1-82b8-c3b02560f146@6c48a",
-        "atlasUuid": "109abecd-425d-4cd3-bf79-2139a70a4781"
+        "imageUuidOrDatabaseUri": "3c04d65e-6f3f-47ed-aeec-18e5af995721@6c48a",
+        "atlasUuid": "e02aab21-5022-49cf-8f11-5df17291e314",
+        "trimType": "auto"
       },
       "ver": "1.0.12",
       "imported": true,
@@ -99,24 +99,23 @@
       ],
       "subMetas": {}
     },
-    "2254a": {
+    "b1854": {
       "importer": "sprite-frame",
-      "uuid": "109abecd-425d-4cd3-bf79-2139a70a4781@2254a",
+      "uuid": "e02aab21-5022-49cf-8f11-5df17291e314@b1854",
       "displayName": "",
-      "id": "2254a",
-      "name": "isometric_grass_normal_tileset_01",
+      "id": "b1854",
+      "name": "isometric_grass_tileset_03",
       "userData": {
-        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
         "offsetY": 0,
-        "trimX": 204,
-        "trimY": 757,
+        "trimX": 1266,
+        "trimY": 6,
         "width": 200,
-        "height": 149,
+        "height": 100,
         "rawWidth": 200,
-        "rawHeight": 149,
+        "rawHeight": 100,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -135,8 +134,9 @@
           "maxPos": []
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "8ac1926a-526f-4ab1-82b8-c3b02560f146@6c48a",
-        "atlasUuid": "109abecd-425d-4cd3-bf79-2139a70a4781"
+        "imageUuidOrDatabaseUri": "3c04d65e-6f3f-47ed-aeec-18e5af995721@6c48a",
+        "atlasUuid": "e02aab21-5022-49cf-8f11-5df17291e314",
+        "trimType": "auto"
       },
       "ver": "1.0.12",
       "imported": true,
@@ -145,24 +145,23 @@
       ],
       "subMetas": {}
     },
-    "2bc6e": {
+    "60ef8": {
       "importer": "sprite-frame",
-      "uuid": "109abecd-425d-4cd3-bf79-2139a70a4781@2bc6e",
+      "uuid": "e02aab21-5022-49cf-8f11-5df17291e314@60ef8",
       "displayName": "",
-      "id": "2bc6e",
-      "name": "isometric_grass_normal_tileset_02",
+      "id": "60ef8",
+      "name": "isometric_grass_tileset_04",
       "userData": {
-        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
         "offsetY": 0,
-        "trimX": 2,
-        "trimY": 757,
+        "trimX": 1056,
+        "trimY": 6,
         "width": 200,
-        "height": 149,
+        "height": 100,
         "rawWidth": 200,
-        "rawHeight": 149,
+        "rawHeight": 100,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -181,8 +180,9 @@
           "maxPos": []
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "8ac1926a-526f-4ab1-82b8-c3b02560f146@6c48a",
-        "atlasUuid": "109abecd-425d-4cd3-bf79-2139a70a4781"
+        "imageUuidOrDatabaseUri": "3c04d65e-6f3f-47ed-aeec-18e5af995721@6c48a",
+        "atlasUuid": "e02aab21-5022-49cf-8f11-5df17291e314",
+        "trimType": "auto"
       },
       "ver": "1.0.12",
       "imported": true,
@@ -191,24 +191,23 @@
       ],
       "subMetas": {}
     },
-    "fc5ca": {
+    "2b7d2": {
       "importer": "sprite-frame",
-      "uuid": "109abecd-425d-4cd3-bf79-2139a70a4781@fc5ca",
+      "uuid": "e02aab21-5022-49cf-8f11-5df17291e314@2b7d2",
       "displayName": "",
-      "id": "fc5ca",
-      "name": "isometric_grass_normal_tileset_03",
+      "id": "2b7d2",
+      "name": "isometric_grass_tileset_05",
       "userData": {
-        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
         "offsetY": 0,
-        "trimX": 204,
-        "trimY": 606,
+        "trimX": 846,
+        "trimY": 6,
         "width": 200,
-        "height": 149,
+        "height": 100,
         "rawWidth": 200,
-        "rawHeight": 149,
+        "rawHeight": 100,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -227,8 +226,9 @@
           "maxPos": []
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "8ac1926a-526f-4ab1-82b8-c3b02560f146@6c48a",
-        "atlasUuid": "109abecd-425d-4cd3-bf79-2139a70a4781"
+        "imageUuidOrDatabaseUri": "3c04d65e-6f3f-47ed-aeec-18e5af995721@6c48a",
+        "atlasUuid": "e02aab21-5022-49cf-8f11-5df17291e314",
+        "trimType": "auto"
       },
       "ver": "1.0.12",
       "imported": true,
@@ -237,24 +237,23 @@
       ],
       "subMetas": {}
     },
-    "e7d40": {
+    "1428b": {
       "importer": "sprite-frame",
-      "uuid": "109abecd-425d-4cd3-bf79-2139a70a4781@e7d40",
+      "uuid": "e02aab21-5022-49cf-8f11-5df17291e314@1428b",
       "displayName": "",
-      "id": "e7d40",
-      "name": "isometric_grass_normal_tileset_04",
+      "id": "1428b",
+      "name": "isometric_grass_tileset_06",
       "userData": {
-        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
         "offsetY": 0,
-        "trimX": 2,
-        "trimY": 606,
+        "trimX": 636,
+        "trimY": 6,
         "width": 200,
-        "height": 149,
+        "height": 100,
         "rawWidth": 200,
-        "rawHeight": 149,
+        "rawHeight": 100,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -273,8 +272,9 @@
           "maxPos": []
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "8ac1926a-526f-4ab1-82b8-c3b02560f146@6c48a",
-        "atlasUuid": "109abecd-425d-4cd3-bf79-2139a70a4781"
+        "imageUuidOrDatabaseUri": "3c04d65e-6f3f-47ed-aeec-18e5af995721@6c48a",
+        "atlasUuid": "e02aab21-5022-49cf-8f11-5df17291e314",
+        "trimType": "auto"
       },
       "ver": "1.0.12",
       "imported": true,
@@ -283,24 +283,23 @@
       ],
       "subMetas": {}
     },
-    "4ed28": {
+    "d089d": {
       "importer": "sprite-frame",
-      "uuid": "109abecd-425d-4cd3-bf79-2139a70a4781@4ed28",
+      "uuid": "e02aab21-5022-49cf-8f11-5df17291e314@d089d",
       "displayName": "",
-      "id": "4ed28",
-      "name": "isometric_grass_normal_tileset_05",
+      "id": "d089d",
+      "name": "isometric_grass_tileset_07",
       "userData": {
-        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
         "offsetY": 0,
-        "trimX": 204,
-        "trimY": 455,
+        "trimX": 426,
+        "trimY": 6,
         "width": 200,
-        "height": 149,
+        "height": 100,
         "rawWidth": 200,
-        "rawHeight": 149,
+        "rawHeight": 100,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -319,8 +318,9 @@
           "maxPos": []
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "8ac1926a-526f-4ab1-82b8-c3b02560f146@6c48a",
-        "atlasUuid": "109abecd-425d-4cd3-bf79-2139a70a4781"
+        "imageUuidOrDatabaseUri": "3c04d65e-6f3f-47ed-aeec-18e5af995721@6c48a",
+        "atlasUuid": "e02aab21-5022-49cf-8f11-5df17291e314",
+        "trimType": "auto"
       },
       "ver": "1.0.12",
       "imported": true,
@@ -329,24 +329,23 @@
       ],
       "subMetas": {}
     },
-    "e9a49": {
+    "aa0d1": {
       "importer": "sprite-frame",
-      "uuid": "109abecd-425d-4cd3-bf79-2139a70a4781@e9a49",
+      "uuid": "e02aab21-5022-49cf-8f11-5df17291e314@aa0d1",
       "displayName": "",
-      "id": "e9a49",
-      "name": "isometric_grass_normal_tileset_07",
+      "id": "aa0d1",
+      "name": "isometric_grass_tileset_08",
       "userData": {
-        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
         "offsetY": 0,
-        "trimX": 204,
-        "trimY": 304,
+        "trimX": 216,
+        "trimY": 6,
         "width": 200,
-        "height": 149,
+        "height": 100,
         "rawWidth": 200,
-        "rawHeight": 149,
+        "rawHeight": 100,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -365,8 +364,9 @@
           "maxPos": []
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "8ac1926a-526f-4ab1-82b8-c3b02560f146@6c48a",
-        "atlasUuid": "109abecd-425d-4cd3-bf79-2139a70a4781"
+        "imageUuidOrDatabaseUri": "3c04d65e-6f3f-47ed-aeec-18e5af995721@6c48a",
+        "atlasUuid": "e02aab21-5022-49cf-8f11-5df17291e314",
+        "trimType": "auto"
       },
       "ver": "1.0.12",
       "imported": true,
@@ -375,24 +375,23 @@
       ],
       "subMetas": {}
     },
-    "585d6": {
+    "e9879": {
       "importer": "sprite-frame",
-      "uuid": "109abecd-425d-4cd3-bf79-2139a70a4781@585d6",
+      "uuid": "e02aab21-5022-49cf-8f11-5df17291e314@e9879",
       "displayName": "",
-      "id": "585d6",
-      "name": "isometric_grass_normal_tileset_08",
+      "id": "e9879",
+      "name": "isometric_grass_tileset_09",
       "userData": {
-        "trimType": "auto",
         "trimThreshold": 1,
         "rotated": false,
         "offsetX": 0,
         "offsetY": 0,
-        "trimX": 2,
-        "trimY": 304,
+        "trimX": 6,
+        "trimY": 6,
         "width": 200,
-        "height": 149,
+        "height": 100,
         "rawWidth": 200,
-        "rawHeight": 149,
+        "rawHeight": 100,
         "borderTop": 0,
         "borderBottom": 0,
         "borderLeft": 0,
@@ -411,146 +410,9 @@
           "maxPos": []
         },
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "8ac1926a-526f-4ab1-82b8-c3b02560f146@6c48a",
-        "atlasUuid": "109abecd-425d-4cd3-bf79-2139a70a4781"
-      },
-      "ver": "1.0.12",
-      "imported": true,
-      "files": [
-        ".json"
-      ],
-      "subMetas": {}
-    },
-    "0667c": {
-      "importer": "sprite-frame",
-      "uuid": "109abecd-425d-4cd3-bf79-2139a70a4781@0667c",
-      "displayName": "",
-      "id": "0667c",
-      "name": "isometric_grass_normal_tileset_09",
-      "userData": {
-        "trimType": "auto",
-        "trimThreshold": 1,
-        "rotated": false,
-        "offsetX": 0,
-        "offsetY": 0,
-        "trimX": 204,
-        "trimY": 153,
-        "width": 200,
-        "height": 149,
-        "rawWidth": 200,
-        "rawHeight": 149,
-        "borderTop": 0,
-        "borderBottom": 0,
-        "borderLeft": 0,
-        "borderRight": 0,
-        "packable": true,
-        "pixelsToUnit": 100,
-        "pivotX": 0.5,
-        "pivotY": 0.5,
-        "meshType": 0,
-        "vertices": {
-          "rawPosition": [],
-          "indexes": [],
-          "uv": [],
-          "nuv": [],
-          "minPos": [],
-          "maxPos": []
-        },
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "8ac1926a-526f-4ab1-82b8-c3b02560f146@6c48a",
-        "atlasUuid": "109abecd-425d-4cd3-bf79-2139a70a4781"
-      },
-      "ver": "1.0.12",
-      "imported": true,
-      "files": [
-        ".json"
-      ],
-      "subMetas": {}
-    },
-    "c9e11": {
-      "importer": "sprite-frame",
-      "uuid": "109abecd-425d-4cd3-bf79-2139a70a4781@c9e11",
-      "displayName": "",
-      "id": "c9e11",
-      "name": "isometric_grass_normal_tileset_11",
-      "userData": {
-        "trimType": "auto",
-        "trimThreshold": 1,
-        "rotated": false,
-        "offsetX": 0,
-        "offsetY": 0,
-        "trimX": 204,
-        "trimY": 2,
-        "width": 200,
-        "height": 149,
-        "rawWidth": 200,
-        "rawHeight": 149,
-        "borderTop": 0,
-        "borderBottom": 0,
-        "borderLeft": 0,
-        "borderRight": 0,
-        "packable": true,
-        "pixelsToUnit": 100,
-        "pivotX": 0.5,
-        "pivotY": 0.5,
-        "meshType": 0,
-        "vertices": {
-          "rawPosition": [],
-          "indexes": [],
-          "uv": [],
-          "nuv": [],
-          "minPos": [],
-          "maxPos": []
-        },
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "8ac1926a-526f-4ab1-82b8-c3b02560f146@6c48a",
-        "atlasUuid": "109abecd-425d-4cd3-bf79-2139a70a4781"
-      },
-      "ver": "1.0.12",
-      "imported": true,
-      "files": [
-        ".json"
-      ],
-      "subMetas": {}
-    },
-    "d9e52": {
-      "importer": "sprite-frame",
-      "uuid": "109abecd-425d-4cd3-bf79-2139a70a4781@d9e52",
-      "displayName": "",
-      "id": "d9e52",
-      "name": "isometric_grass_normal_tileset_12",
-      "userData": {
-        "trimType": "auto",
-        "trimThreshold": 1,
-        "rotated": false,
-        "offsetX": 0,
-        "offsetY": 0,
-        "trimX": 2,
-        "trimY": 2,
-        "width": 200,
-        "height": 149,
-        "rawWidth": 200,
-        "rawHeight": 149,
-        "borderTop": 0,
-        "borderBottom": 0,
-        "borderLeft": 0,
-        "borderRight": 0,
-        "packable": true,
-        "pixelsToUnit": 100,
-        "pivotX": 0.5,
-        "pivotY": 0.5,
-        "meshType": 0,
-        "vertices": {
-          "rawPosition": [],
-          "indexes": [],
-          "uv": [],
-          "nuv": [],
-          "minPos": [],
-          "maxPos": []
-        },
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "8ac1926a-526f-4ab1-82b8-c3b02560f146@6c48a",
-        "atlasUuid": "109abecd-425d-4cd3-bf79-2139a70a4781"
+        "imageUuidOrDatabaseUri": "3c04d65e-6f3f-47ed-aeec-18e5af995721@6c48a",
+        "atlasUuid": "e02aab21-5022-49cf-8f11-5df17291e314",
+        "trimType": "auto"
       },
       "ver": "1.0.12",
       "imported": true,
@@ -563,7 +425,7 @@
   "userData": {
     "atlasTextureName": "isometric_grass_normal.png",
     "format": 2,
-    "uuid": "109abecd-425d-4cd3-bf79-2139a70a4781",
-    "textureUuid": "8ac1926a-526f-4ab1-82b8-c3b02560f146@6c48a"
+    "uuid": "e02aab21-5022-49cf-8f11-5df17291e314",
+    "textureUuid": "3c04d65e-6f3f-47ed-aeec-18e5af995721@6c48a"
   }
 }
