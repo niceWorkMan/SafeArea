@@ -50,9 +50,13 @@ export class Charctor extends BasePawn {
     }
   }
 
+
+
+  private followSpeed: number = 5;         // 相机跟随速度
+
   updatePosition(deltaTime: number) {
     const dir = this.joystick.getDirection();
-    if (dir.length() > 0) {
+    if (dir.length() > 0.1) {
       const move = new Vec3(
         dir.x * this.speed * deltaTime,
         dir.y * this.speed * deltaTime,
@@ -60,9 +64,18 @@ export class Charctor extends BasePawn {
       );
       //更新pawn移动
       this.node.position = this.node.position.clone().add(move)
-      //更新相机移动(to do 后面做缓动动画)
-      this.cameraNode.worldPosition = this.node.worldPosition;
+
+
     }
+
+    // ===== 相机永远追玩家=====
+    const targetPos = this.node.worldPosition;
+    const currentPos = this.cameraNode.worldPosition.clone();
+    //阻尼跟随
+    const t = 1 - Math.exp(-this.followSpeed * deltaTime);
+    const newPos = currentPos.lerp(targetPos, t);
+    //设置相机位置
+    this.cameraNode.setWorldPosition(newPos);
   }
 
   protected lateUpdate(deltaTime: number) { }
