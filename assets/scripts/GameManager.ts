@@ -51,7 +51,7 @@ export class GameManager extends Component {
     // 2. 加载 atlas
     const atlas: SpriteAtlas = await new Promise((resolve, reject) => {
       bundle.load(
-        "atlas/ground/isometric_grass_normal",
+        "atlas/ground/isometric_grass_ext",
         SpriteAtlas,
         (err, atlas) => {
           if (err) reject(err);
@@ -64,7 +64,6 @@ export class GameManager extends Component {
     });
 
     // 3. prefab 已经加载完成，atlas 也准备好了，可以生成地图
-    console.log("加载地图22");
     MapManager.Instance.generateMap(atlas);
 
     //执行加载完所有东西后执行初始化

@@ -11,6 +11,7 @@ import {
 import { BasePawn } from "./BasePawn";
 import { UIManager } from "../UI/UIManager";
 import { GameManager } from "../GameManager";
+import { MapManager } from "../MapManager";
 const { ccclass, property } = _decorator;
 
 @ccclass("Charctor")
@@ -39,7 +40,7 @@ export class Charctor extends BasePawn {
       this.node.worldPosition.add(this._spawnPos)
     );
     //设置
-    this.node.position = this._spawnPos
+    this.node.position = this._spawnPos;
   }
 
   update(deltaTime: number) {
@@ -50,9 +51,7 @@ export class Charctor extends BasePawn {
     }
   }
 
-
-
-  private followSpeed: number = 5;         // 相机跟随速度
+  private followSpeed: number = 5; // 相机跟随速度
 
   updatePosition(deltaTime: number) {
     const dir = this.joystick.getDirection();
@@ -63,9 +62,13 @@ export class Charctor extends BasePawn {
         0
       );
       //更新pawn移动
-      this.node.position = this.node.position.clone().add(move)
+      this.node.position = this.node.position.clone().add(move);
+      console.log("charactor位置:", this.node.position);
 
-
+      //更新地图
+      if (MapManager.Instance) {
+        MapManager.Instance.updateMap(this.node.position);
+      }
     }
 
     // ===== 相机永远追玩家=====
@@ -78,5 +81,5 @@ export class Charctor extends BasePawn {
     this.cameraNode.setWorldPosition(newPos);
   }
 
-  protected lateUpdate(deltaTime: number) { }
+  protected lateUpdate(deltaTime: number) {}
 }

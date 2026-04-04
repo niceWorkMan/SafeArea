@@ -40,98 +40,254 @@ export class MapManager extends Component {
   tileWidth = 200;
   tileHeight = 100;
 
-  //地图尺寸  200x149
-
-  mapWidth = 20;
-  mapHeight = 20;
+  //地图尺寸  200x200
+  mapWidth = 200;
+  mapHeight = 200;
 
   //草地渲染网格
   private _mapSprites: Grid[][] = [];
   public get mapSprites(): Grid[][] {
     return this._mapSprites;
   }
+  private mapData: string[][] = [];
+
+
+  //视窗宽度格子数量
+  viewWidth = 15;
+  //视窗高度格子数量
+  viewHeight = 15;
+
+  // 当前视野左下角 tile
+  viewStartX = 0;
+  viewStartY = 0;
+
+  private atlas: any;
+
+  // 节点缓存（10x10）
+  private viewTiles: Grid[][] = [];
 
   generateMap(atlas) {
-    if (!atlas) {
-      console.error("generateMap: atlas is undefined!");
-      return;
-    }
+    if (!atlas) return;
 
-    // 地形层
+    this.atlas = atlas;
+
     const ground = this.node.getChildByName("GroundNode");
-    if (!ground) {
-      console.error("generateMap: GroundNode not found!");
-      return;
-    }
-
     const gridPrefb = GameManager.Instance?.prefabMap?.["Grid"];
-    if (!gridPrefb) {
-      console.error("generateMap: Grid prefab not loaded!");
-      return;
-    }
 
     this._mapSprites = [];
+    this.viewTiles = [];
 
+    //  先生成地图数据（可以 100x100）
     for (let x = 0; x < this.mapWidth; x++) {
-      this._mapSprites[x] = [];
+      this.mapData[x] = [];
       for (let y = 0; y < this.mapHeight; y++) {
-        const tileNode = instantiate(gridPrefb);
-        if (!tileNode) {
-          console.warn(`instantiate failed at ${x},${y}`);
-          continue;
-        }
+        this.mapData[x][y] = this.getTileType(x, y);
+      }
+    }
 
+    //  只创建 10x10 节点
+    for (let x = 0; x < this.viewWidth; x++) {
+      this.viewTiles[x] = [];
+
+      for (let y = 0; y < this.viewHeight; y++) {
+        const tileNode = instantiate(gridPrefb);
         const grid = tileNode.getComponent(Grid);
-        if (!grid) {
-          console.warn(`Grid component missing at ${x},${y}`);
-          continue;
-        }
 
         grid.gridIndex = new Vec2(x, y);
-
-        const sprite = tileNode.getComponent(Sprite);
-        if (!sprite) {
-          console.warn(`Sprite component missing at ${x},${y}`);
-        } else {
-          var randex = math.random() > 0.2 ? 1 : math.randomRangeInt(1, 9);
-          const frameName = "isometric_grass_tileset_0" + randex;
-          const spriteFrame = atlas.getSpriteFrame(frameName);
-          if (!spriteFrame) {
-            console.warn(`SpriteFrame not found: ${frameName}`);
-          } else {
-            sprite.spriteFrame = spriteFrame;
-          }
-        }
-
-        // 坐标转换
-        const posX = ((x - y) * this.tileWidth) / 2;
-        const posY = ((x + y) * this.tileHeight) / 2;
-        tileNode.setPosition(posX, -posY);
 
         tileNode.layer = Layers.Enum.DEFAULT;
         ground.addChild(tileNode);
 
-        //grid.showIndexLabel(true);
-        this._mapSprites[x][y] = grid;
+        this.viewTiles[x][y] = grid;
       }
     }
 
-    // 设置镜头 Character 和初始位置
-    const CenerIndex = new Vec2(
-      Math.floor(this.mapWidth / 2),
-      Math.floor(this.mapHeight / 2)
-    );
+    // 设置出生点
+    const centerX = Math.floor(this.mapWidth / 2);
+    const centerY = Math.floor(this.mapHeight / 2);
 
-    const _firstGrid = this._mapSprites[0]?.[0];
-    const centerGrid = this._mapSprites[CenerIndex.x]?.[CenerIndex.y];
+    const startX = centerX - Math.floor(this.viewWidth / 2);
+    const startY = centerY - Math.floor(this.viewHeight / 2);
+    //设置初始位置
+    this.updateView(startX, startY);
 
-    console.log("CenerIndex:", CenerIndex);
+    // ⭐把“tile坐标 → 世界坐标”
+    const posX = ((centerX - centerY) * this.tileWidth) / 2;
+    const posY = ((centerX + centerY) * this.tileHeight) / 2;
 
-    if (!_firstGrid || !centerGrid) {
-      console.error("generateMap: invalid _mapSprites grid!");
-      return;
+    // ⭐出生点放在地图中心tile
+    GameManager.Instance.initSpawn(new Vec3(posX, posY));
+  }
+
+  updateView(startX: number, startY: number) {
+    this.viewStartX = startX;
+    this.viewStartY = startY;
+
+    let nodes: Node[] = [];
+
+    for (let x = 0; x < this.viewWidth; x++) {
+      for (let y = 0; y < this.viewHeight; y++) {
+        let worldX = startX + x;
+        let worldY = startY + y;
+
+        const grid = this.viewTiles[x][y];
+        const node = grid.node;
+
+        // 越界保护
+        if (
+          worldX < 0 ||
+          worldY < 0 ||
+          worldX >= this.mapWidth ||
+          worldY >= this.mapHeight
+        ) {
+          node.active = false;
+          continue;
+        }
+
+        node.active = true;
+
+        grid.WordPos = new Vec2(worldX, worldY);
+
+        const type = this.mapData[worldX][worldY];
+
+        const sprite = node.getComponent(Sprite);
+
+        //  根据地形设置图
+        let frameName = "";
+
+        switch (type) {
+          case "water":
+            frameName = "isometric_grass_tileset_ext_01";
+            break;
+          case "sand":
+            frameName = "isometric_grass_tileset_ext_06";
+            break;
+          case "grass":
+            frameName = "isometric_grass_tileset_ext_08";
+            break;
+          case "stone":
+            frameName = "isometric_grass_tileset_ext_10";
+            break;
+          default:
+            frameName = "isometric_grass_tileset_ext_08"; // 防御
+        }
+
+        var spriteFrame = this.atlas.getSpriteFrame(frameName);
+        if (!spriteFrame) {
+          console.warn(`SpriteFrame not found: ${frameName}`);
+        } else {
+          sprite.spriteFrame = spriteFrame;
+        }
+
+        const posX = ((worldX - worldY) * this.tileWidth) / 2;
+        const posY = ((worldX + worldY) * this.tileHeight) / 2;
+
+        node.setPosition(posX, posY);
+
+        // ⭐记录“世界排序值”（关键！！）
+        (node as any)._order = worldX + worldY;
+
+        nodes.push(node);
+      }
     }
 
-    GameManager.Instance.initSpawn(centerGrid.node.position);
+    nodes.sort((a, b) => {
+      return (b as any)._order - (a as any)._order;
+    });
+
+    for (let i = 0; i < nodes.length; i++) {
+      nodes[i].setSiblingIndex(i);
+    }
+  }
+
+  worldToTile(pos: Vec3) {
+    const halfW = this.tileWidth / 2;
+    const halfH = this.tileHeight / 2;
+
+    const tx = (pos.x / halfW + pos.y / halfH) / 2;
+    const ty = (pos.y / halfH - pos.x / halfW) / 2;
+
+    return {
+      x: Math.floor(tx),
+      y: Math.floor(ty),
+    };
+  }
+  updateMap(playerPos) {
+    const tile = this.worldToTile(playerPos);
+    const newStartX = tile.x - Math.floor(this.viewWidth / 2);
+    const newStartY = tile.y - Math.floor(this.viewHeight / 2);
+    if (newStartX !== this.viewStartX || newStartY !== this.viewStartY) {
+      this.updateView(newStartX, newStartY);
+    }
+  }
+
+  /**
+   * Hash 随机（基础）
+   * @param x
+   * @param y
+   * @param seed
+   * @returns
+   */
+  rand(x: number, y: number, seed: number) {
+    let n = x * 374761393 + y * 668265263 + seed * 1447;
+    n = (n ^ (n >> 13)) * 1274126177;
+    return ((n ^ (n >> 16)) & 0xff) / 255;
+  }
+
+  lerp(a: number, b: number, t: number) {
+    return a + (b - a) * t;
+  }
+
+  /**
+   * 平滑插值（重点）
+   * @param x
+   * @param y
+   * @param seed
+   * @returns
+   */
+  smoothNoise(x: number, y: number, seed: number) {
+    let ix = Math.floor(x);
+    let iy = Math.floor(y);
+
+    let fx = x - ix;
+    let fy = y - iy;
+
+    let v00 = this.rand(ix, iy, seed);
+    let v10 = this.rand(ix + 1, iy, seed);
+    let v01 = this.rand(ix, iy + 1, seed);
+    let v11 = this.rand(ix + 1, iy + 1, seed);
+
+    let vx0 = this.lerp(v00, v10, fx);
+    let vx1 = this.lerp(v01, v11, fx);
+
+    return this.lerp(vx0, vx1, fy);
+  }
+
+  /**
+   * 3. 多层噪声（地形关键）
+   * @param x
+   * @param y
+   * @param seed
+   * @returns
+   */
+  noise(x: number, y: number, seed: number) {
+    let v = 0;
+
+    let scale = 0.03; // ⭐ 比你原来更大块
+
+    v += this.smoothNoise(x * scale, y * scale, seed) * 0.6;
+    v += this.smoothNoise(x * scale * 2, y * scale * 2, seed) * 0.3;
+    v += this.smoothNoise(x * scale * 4, y * scale * 4, seed) * 0.1;
+
+    return v;
+  }
+
+  getTileType(x: number, y: number) {
+    let v = this.noise(x, y, 12345);
+
+    if (v < 0.35) return "water";
+    if (v < 0.45) return "sand";
+    if (v < 0.75) return "grass";
+    return "stone";
   }
 }
