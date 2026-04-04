@@ -200,6 +200,7 @@ export class MapManager extends Component {
     }
   }
 
+  //地图坐标转TileIndex
   worldToTile(pos: Vec3) {
     const halfW = this.tileWidth / 2;
     const halfH = this.tileHeight / 2;

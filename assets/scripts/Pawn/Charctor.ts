@@ -67,6 +67,7 @@ export class Charctor extends BasePawn {
 
       //更新地图
       if (MapManager.Instance) {
+        //这里必须更新局部坐标
         MapManager.Instance.updateMap(this.node.position);
       }
     }
