@@ -143,9 +143,9 @@ export class MapManager extends Component {
   private mapData: TileType[][] = [];
 
   //视窗宽度格子数量
-  viewWidth = 15;
+  viewWidth = 20;
   //视窗高度格子数量
-  viewHeight = 15;
+  viewHeight = 20;
 
   // 当前视野左下角 tile
   viewStartX = 0;
