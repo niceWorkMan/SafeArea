@@ -21,7 +21,7 @@ const { ccclass, property } = _decorator;
 export class Charctor extends BasePawn {
   @property(Node)
   joystickNode: Node = null;
-  speed = 500;
+  speed = 1500;
 
   cameraNode: Node = null;
 

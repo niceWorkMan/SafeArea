@@ -49,8 +49,7 @@ export class MapManager extends Component {
   public get mapSprites(): Grid[][] {
     return this._mapSprites;
   }
-  private mapData: string[][] = [];
-
+  private mapData: TileType[][] = [];
 
   //视窗宽度格子数量
   viewWidth = 15;
@@ -66,6 +65,38 @@ export class MapManager extends Component {
   // 节点缓存（10x10）
   private viewTiles: Grid[][] = [];
 
+  fixTileWithBase(baseMap: TileType[][], x: number, y: number): TileType {
+    const tile = baseMap[x][y];
+  
+    const neighbors = [
+      baseMap[x]?.[y + 1],
+      baseMap[x + 1]?.[y],
+      baseMap[x]?.[y - 1],
+      baseMap[x - 1]?.[y],
+    ].filter((v) => v !== undefined);
+  
+    const nearWater = neighbors.some((t) => t === TileType.Water);
+    const nearGrass = neighbors.some((t) => t === TileType.Grass);
+  
+    // ===== 1. 沼泽：只在 水+草 之间生成 =====
+    if (tile === TileType.Grass && nearWater) {
+      const r = this.rand(x, y, 888);
+      if (r < 0.3) return TileType.Swamp;
+    }
+  
+    // ===== 2. 禁止 水 紧挨 石头 =====
+    if (tile === TileType.Water) {
+      const nearStone = neighbors.some((t) => t === TileType.Stone);
+      if (nearStone) return TileType.Swamp; // 👉 变缓冲层
+    }
+  
+    // ===== 3. 禁止 石头 靠水 =====
+    if (tile === TileType.Stone && nearWater) {
+      return TileType.Grass; // 👉 或者 Swamp
+    }
+  
+    return tile;
+  }
   generateMap(atlas) {
     if (!atlas) return;
 
@@ -77,14 +108,24 @@ export class MapManager extends Component {
     this._mapSprites = [];
     this.viewTiles = [];
 
-    //  先生成地图数据（可以 100x100）
+    // 第一遍：只生成 base
+    let baseMap: TileType[][] = [];
+
     for (let x = 0; x < this.mapWidth; x++) {
-      this.mapData[x] = [];
+      baseMap[x] = [];
       for (let y = 0; y < this.mapHeight; y++) {
-        this.mapData[x][y] = this.getTileType(x, y);
+        baseMap[x][y] = this.getBaseTile(x, y);
       }
     }
 
+    // 第二遍：再修正
+    for (let x = 0; x < this.mapWidth; x++) {
+      this.mapData[x] = [];
+
+      for (let y = 0; y < this.mapHeight; y++) {
+        this.mapData[x][y] = this.fixTileWithBase(baseMap, x, y);
+      }
+    }
     //  只创建 10x10 节点
     for (let x = 0; x < this.viewWidth; x++) {
       this.viewTiles[x] = [];
@@ -148,29 +189,11 @@ export class MapManager extends Component {
 
         grid.WordPos = new Vec2(worldX, worldY);
 
-        const type = this.mapData[worldX][worldY];
-
         const sprite = node.getComponent(Sprite);
 
-        //  根据地形设置图
-        let frameName = "";
-
-        switch (type) {
-          case "water":
-            frameName = "isometric_grass_tileset_ext_01";
-            break;
-          case "sand":
-            frameName = "isometric_grass_tileset_ext_06";
-            break;
-          case "grass":
-            frameName = "isometric_grass_tileset_ext_08";
-            break;
-          case "stone":
-            frameName = "isometric_grass_tileset_ext_10";
-            break;
-          default:
-            frameName = "isometric_grass_tileset_ext_08"; // 防御
-        }
+        const type = this.mapData[worldX][worldY];
+        const key = this.getTileKey(type); // ✅ 转成string
+        let frameName = this.getRandomFrame(key, worldX, worldY);
 
         var spriteFrame = this.atlas.getSpriteFrame(frameName);
         if (!spriteFrame) {
@@ -271,24 +294,220 @@ export class MapManager extends Component {
    * @param seed
    * @returns
    */
-  noise(x: number, y: number, seed: number) {
-    let v = 0;
-
-    let scale = 0.03; // ⭐ 比你原来更大块
-
-    v += this.smoothNoise(x * scale, y * scale, seed) * 0.6;
-    v += this.smoothNoise(x * scale * 2, y * scale * 2, seed) * 0.3;
-    v += this.smoothNoise(x * scale * 4, y * scale * 4, seed) * 0.1;
-
-    return v;
+  noise(x: number, y: number): number {
+    const n = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
+    return n - Math.floor(n);
   }
 
-  getTileType(x: number, y: number) {
-    let v = this.noise(x, y, 12345);
+  // getBaseTile(x: number, y: number): TileType {
+  //   // 大地形（决定区域）
+  //   const macro = this.smoothNoise(x * 0.02, y * 0.02, 100);
 
-    if (v < 0.35) return "water";
-    if (v < 0.45) return "sand";
-    if (v < 0.75) return "grass";
-    return "stone";
+  //   // 小变化（增加细节）
+  //   const detail = this.smoothNoise(x * 0.08, y * 0.08, 200);
+
+  //   const n = macro * 0.8 + detail * 0.2;
+
+  //   if (n < 0.35) return TileType.Water;
+  //   if (n < 0.5) return TileType.Grass;
+  //   if (n < 0.7) return TileType.Stone;
+  //   return TileType.Desert;
+  // }
+
+  pickByRate(x: number, y: number): TileType {
+    const r = this.rand(x, y, 12345); // ✅ 真·均匀随机
+
+    const water = 0.15;
+    const desert = 0.15;
+    const grass = 0.5;
+    const stone = 0.2;
+
+    if (r < water) return TileType.Water;
+    if (r < water + desert) return TileType.Desert;
+    if (r < water + desert + grass) return TileType.Grass;
+    return TileType.Stone;
   }
+
+  getBiome(x: number, y: number): number {
+    return this.smoothNoise(x * 0.01, y * 0.01, 999); // 超低频
+  }
+
+  getBaseTile(x: number, y: number): TileType {
+    // ===== 1. 中心保护 =====
+    const centerX = this.mapWidth / 2;
+    const centerY = this.mapHeight / 2;
+
+    const dx = x - centerX;
+    const dy = y - centerY;
+
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const maxDist = Math.sqrt(centerX * centerX + centerY * centerY);
+
+    const distFactor = dist / maxDist;
+
+    // ===== 2. 中心区域（强制草地）=====
+    if (distFactor < 0.2) {
+      return TileType.Grass;
+    }
+
+    // ===== 3. 大区块（让地图成片）=====
+    const biome = this.getBiome(x, y);
+
+    // 👉 控制：哪里更容易出什么
+    if (biome < 0.3) {
+      // 水区（但不是全水）
+      return this.rand(x, y, 1) < 0.6 ? TileType.Water : TileType.Swamp;
+    }
+
+    if (biome < 0.5) {
+      return TileType.Desert;
+    }
+
+    if (biome < 0.8) {
+      return TileType.Grass;
+    }
+
+    // 石头区
+    return this.rand(x, y, 2) < 0.7 ? TileType.Stone : TileType.Grass;
+  }
+  getNeighbors(x: number, y: number): TileType[] {
+    const dirs = [
+      [0, 1],
+      [1, 0],
+      [0, -1],
+      [-1, 0],
+    ];
+
+    const list: TileType[] = [];
+
+    for (const [dx, dy] of dirs) {
+      const nx = x + dx;
+      const ny = y + dy;
+
+      if (this.mapData[nx] && this.mapData[nx][ny] !== undefined) {
+        list.push(this.mapData[nx][ny]);
+      }
+    }
+
+    return list;
+  }
+
+  getTileSprite(type: TileType): string {
+    switch (type) {
+      case TileType.Grass:
+        return "grass";
+      case TileType.Stone:
+        return "stone";
+      case TileType.Desert:
+        return "desert";
+      case TileType.Water:
+        return "water";
+      case TileType.Swamp:
+        return "swamp";
+    }
+  }
+
+  fixTile(x: number, y: number, tile: TileType): TileType {
+    const neighbors = this.getNeighbors(x, y);
+
+    const nearWater = neighbors.some((t) => t === TileType.Water);
+    const nearDesert = neighbors.some((t) => t === TileType.Desert);
+
+    // 🌊 水不能靠沙漠
+    if (tile === TileType.Water && nearDesert) {
+      return TileType.Stone;
+    }
+
+    // 🐊 沼泽：必须靠水
+    if (tile !== TileType.Water && nearWater) {
+      return TileType.Swamp;
+    }
+
+    // 🏜️ 沙漠：不能靠水
+    if (tile === TileType.Desert && nearWater) {
+      return TileType.Grass;
+    }
+
+    return tile;
+  }
+
+  getTileKey(type: TileType): string {
+    switch (type) {
+      case TileType.Grass:
+        return "grass";
+      case TileType.Stone:
+        return "stone";
+      case TileType.Desert:
+        return "sand";
+      case TileType.Water:
+        return "water";
+      case TileType.Swamp:
+        return "swamp";
+    }
+  }
+
+  /**
+   * 定义配置
+   */
+  private tileConfig: Record<string, { frame: string; weight: number }[]> = {
+    water: [
+      { frame: "isometric_lake_water_08", weight: 70 },
+      { frame: "isometric_lake_water_04", weight: 30 },
+    ],
+
+    swamp: [
+      { frame: "isometric_swamp_tileset_03", weight: 70 },
+      { frame: "isometric_swamp_tileset_06", weight: 30 },
+    ],
+
+    sand: [{ frame: "isometric_desert_tileset_12", weight: 100 }],
+
+    grass: [
+      { frame: "isometric_grass_tileset_ext_09", weight: 70 },
+      { frame: "isometric_grass_tileset_ext_04", weight: 30 },
+    ],
+
+    stone: [
+      { frame: "isometric_stone_tileset_11", weight: 70 },
+      { frame: "isometric_stone_tileset_03", weight: 30 },
+    ],
+  };
+
+  /**
+   * 权重随机函数
+   * @param type
+   * @param x
+   * @param y
+   * @returns
+   */
+  getRandomFrame(type: string, x: number, y: number) {
+    const list = this.tileConfig[type];
+    if (!list || list.length === 0) return "";
+
+    //  用坐标做“稳定随机”（保证同一格不会跳变）
+    const r = this.rand(x, y, 9999); // 0~1
+
+    let total = 0;
+    for (let i = 0; i < list.length; i++) {
+      total += list[i].weight;
+    }
+
+    let acc = 0;
+    for (let i = 0; i < list.length; i++) {
+      acc += list[i].weight / total;
+      if (r <= acc) {
+        return list[i].frame;
+      }
+    }
+
+    return list[0].frame;
+  }
+}
+
+enum TileType {
+  Grass = 0,
+  Stone = 1,
+  Desert = 2,
+  Water = 3,
+  Swamp = 4,
 }

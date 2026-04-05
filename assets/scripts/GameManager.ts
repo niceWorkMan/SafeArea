@@ -51,7 +51,7 @@ export class GameManager extends Component {
     // 2. 加载 atlas
     const atlas: SpriteAtlas = await new Promise((resolve, reject) => {
       bundle.load(
-        "atlas/ground/isometric_grass_ext",
+        "atlas/ground/isometric_ground_ext",
         SpriteAtlas,
         (err, atlas) => {
           if (err) reject(err);
