@@ -5,10 +5,12 @@ import {
   instantiate,
   Layers,
   log,
+  Material,
   math,
   Node,
   resources,
   Sprite,
+  Texture2D,
   SpriteAtlas,
   SpriteRenderer,
   Vec2,
@@ -296,7 +298,6 @@ export class MapManager extends Component {
         const posY = ((worldX + worldY) * this.tileHeight) / 2;
 
         node.setPosition(posX, posY);
-
         // ⭐记录“世界排序值”（关键！！）
         (node as any)._order = worldX + worldY;
 
@@ -549,11 +550,11 @@ export class MapManager extends Component {
    */
   private tileConfig: Record<string, { frame: string; weight: number }[]> = {
     water: [{ frame: "isometric_lake_water_08", weight: 100 }],
-    deepWater: [{ frame: "isometric_lake_water_04", weight: 100 }],
+    deepWater: [{ frame: "isometric_lake_water_02", weight: 100 }],
 
     swamp: [
       { frame: "isometric_swamp_tileset_03", weight: 70 },
-      { frame: "isometric_swamp_tileset_06", weight: 30 },
+      { frame: "isometric_swamp_tileset_08", weight: 30 },
     ],
 
     sand: [{ frame: "isometric_desert_tileset_12", weight: 100 }],
