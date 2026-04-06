@@ -20,6 +20,11 @@ export class BaseGrid extends Component {
       if (lc && this._gridIndex) {
         lc.string = this._gridIndex.x + "--" + this._gridIndex.y;
       }
+
+
+
+      console.log("位置:",this._gridIndex.x + "--" + this._gridIndex.y);
+      
     }
   }
 

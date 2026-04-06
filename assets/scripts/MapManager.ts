@@ -10,6 +10,7 @@ import {
   resources,
   Sprite,
   SpriteAtlas,
+  SpriteRenderer,
   Vec2,
   Vec3,
 } from "cc";
@@ -58,55 +59,40 @@ export class MapManager extends Component {
   mapWidth = 200;
   mapHeight = 200;
 
-
   terrainConfig = {
     scale: {
-      biome: 0.02,      // ⭐ 放大（不然没水）
+      biome: 0.02, // ⭐ 放大（不然没水）
       moisture: 0.02,
       detail: 0.05,
       rock: 0.02,
     },
   };
 
-
   terrainRules = [
-   // 🌊 小水块（优先）
-   {
-    type: TileType.Water,
-    cond: (b) => b < 0.25, // 小水块 -> 改成 0.25 保证触发
-  },
-
-  // 🐊 沼泽（湿地区）
-  {
-    type: TileType.Swamp,
-    cond: (b, m) => b < 0.6 && m > 0.6,
-  },
-
-  // 🌊 深水（大块水域）
-  {
-    type: TileType.DeepWater,
-    cond: (b, m, d, r) => b < 0.5 && d > 0.8,
-  },
-
-  
-    // ===== 🌿 水岸缓冲（非常关键）=====
+    // 🌊 小水块（优先）
     {
-      type: TileType.Grass,
-      cond: (b) => b < 0.48,
+      type: TileType.Water,
+      cond: (b) => b < 0.25, // 小水块 -> 改成 0.25 保证触发
     },
-  
+
+    // 🌊 深水（大块水域）
+    {
+      type: TileType.DeepWater,
+      cond: (b, m, d, r) => b < 0.5 && d > 0.8,
+    },
+
     // ===== 🐊 沼泽（只在草区）=====
     {
       type: TileType.Swamp,
       cond: (b, m) => b < 0.25 && m > 0.85,
     },
-  
+
     // ===== 🏜 沙漠 =====
     {
       type: TileType.Desert,
       cond: (b, m) => b < 0.7 && m < 0.35,
     },
-  
+
     // ===== 🌿 草地细分 =====
     {
       type: TileType.GrassDense,
@@ -116,19 +102,19 @@ export class MapManager extends Component {
       type: TileType.GrassDirt,
       cond: (b, m, d) => b < 0.8 && d < 0.3,
     },
-  
+
     // ===== 🌱 草 =====
     {
       type: TileType.Grass,
       cond: (b) => b < 0.85,
     },
-  
+
     // ===== 🪨 石头（限制区域！！）=====
     {
       type: TileType.Rock,
       cond: (b, m, d, r) => b > 0.7 && r > 0.7,
     },
-  
+
     // ===== fallback =====
     {
       type: TileType.Stone,
@@ -157,25 +143,40 @@ export class MapManager extends Component {
   private viewTiles: Grid[][] = [];
 
   fixTileWithBase(baseMap: TileType[][], x: number, y: number): TileType {
-    const tile = baseMap[x][y];
-  
+    let tile = baseMap[x][y];
+
     const neighbors = [
       baseMap[x]?.[y + 1],
       baseMap[x + 1]?.[y],
       baseMap[x]?.[y - 1],
       baseMap[x - 1]?.[y],
     ].filter((v) => v !== undefined);
-  
+
     const nearWater = neighbors.some(
       (t) => t === TileType.Water || t === TileType.DeepWater
     );
-  
-    // 只做一件事：草边变沼泽
+
+    const nearDesert = neighbors.some((t) => t === TileType.Desert);
+
+    // 草地靠水 -> 沼泽
     if (tile === TileType.Grass && nearWater) {
-      const n = this.smoothNoise(x * 0.1, y * 0.1, 777);
-      if (n > 0.7) return TileType.Swamp;
+      const n = this.smoothNoise(x * 0.1, y * 0.1, 777 + this.seed);
+      if (n > 0.7) tile = TileType.Swamp;
     }
-  
+
+    // 沙漠不能靠水 -> 改为草地或草地细分
+    if (tile === TileType.Desert && nearWater) {
+      tile = TileType.Grass;
+    }
+
+    // 水不能靠沙漠 -> 改为石头
+    if (
+      (tile === TileType.Water || tile === TileType.DeepWater) &&
+      nearDesert
+    ) {
+      tile = TileType.Stone;
+    }
+
     return tile;
   }
 
@@ -203,9 +204,15 @@ export class MapManager extends Component {
     // 第二遍：再修正
     for (let x = 0; x < this.mapWidth; x++) {
       this.mapData[x] = [];
-
       for (let y = 0; y < this.mapHeight; y++) {
         this.mapData[x][y] = this.fixTileWithBase(baseMap, x, y);
+      }
+    }
+
+    // ✅ 增加一次全图 fixTile
+    for (let x = 0; x < this.mapWidth; x++) {
+      for (let y = 0; y < this.mapHeight; y++) {
+        this.mapData[x][y] = this.fixTile(x, y, this.mapData[x][y]);
       }
     }
     //  只创建 10x10 节点
@@ -255,7 +262,6 @@ export class MapManager extends Component {
 
         const grid = this.viewTiles[x][y];
         const node = grid.node;
-
         // 越界保护
         if (
           worldX < 0 ||
@@ -274,7 +280,7 @@ export class MapManager extends Component {
         const sprite = node.getComponent(Sprite);
 
         const type = this.mapData[worldX][worldY];
-        console.log("type检查:", type);
+        //console.log("type检查:", type);
 
         const key = this.getTileKey(type); // ✅ 转成string
         let frameName = this.getRandomFrame(key, worldX, worldY);
@@ -329,6 +335,13 @@ export class MapManager extends Component {
     }
   }
 
+  // ---------- 1️⃣ 增加全局种子 ----------
+  private seed: number = 123456; // 默认种子
+
+  public setSeed(s: number) {
+    this.seed = s;
+  }
+
   /**
    * Hash 随机（基础）
    * @param x
@@ -336,8 +349,9 @@ export class MapManager extends Component {
    * @param seed
    * @returns
    */
-  rand(x: number, y: number, seed: number) {
-    let n = x * 374761393 + y * 668265263 + seed * 1447;
+  rand(x: number, y: number, extraSeed: number = 0) {
+    let n =
+      x * 374761393 + y * 668265263 + this.seed * 1447 + extraSeed * 12345;
     n = (n ^ (n >> 13)) * 1274126177;
     return ((n ^ (n >> 16)) & 0xff) / 255;
   }
@@ -353,17 +367,17 @@ export class MapManager extends Component {
    * @param seed
    * @returns
    */
-  smoothNoise(x: number, y: number, seed: number) {
+  smoothNoise(x: number, y: number, extraSeed: number = 0) {
     let ix = Math.floor(x);
     let iy = Math.floor(y);
 
     let fx = x - ix;
     let fy = y - iy;
 
-    let v00 = this.rand(ix, iy, seed);
-    let v10 = this.rand(ix + 1, iy, seed);
-    let v01 = this.rand(ix, iy + 1, seed);
-    let v11 = this.rand(ix + 1, iy + 1, seed);
+    let v00 = this.rand(ix, iy, extraSeed);
+    let v10 = this.rand(ix + 1, iy, extraSeed);
+    let v01 = this.rand(ix, iy + 1, extraSeed);
+    let v11 = this.rand(ix + 1, iy + 1, extraSeed);
 
     let vx0 = this.lerp(v00, v10, fx);
     let vx1 = this.lerp(v01, v11, fx);
@@ -383,8 +397,6 @@ export class MapManager extends Component {
     return n - Math.floor(n);
   }
 
-
-
   pickByRate(x: number, y: number): TileType {
     const r = this.rand(x, y, 12345); // ✅ 真·均匀随机
 
@@ -400,35 +412,52 @@ export class MapManager extends Component {
   }
 
   getBiome(x: number, y: number): number {
-    return this.smoothNoise(x * 0.01, y * 0.01, 999); // 超低频
+    return this.smoothNoise(x * 0.01, y * 0.01, 999 + this.seed); // 超低频
   }
 
   getBaseTile(x: number, y: number): TileType {
     const cfg = this.terrainConfig;
-  
+
     // ===== 中心保护（缩小范围，否则看不到水）=====
     const cx = this.mapWidth / 2;
     const cy = this.mapHeight / 2;
-  
+
     const dx = x - cx;
     const dy = y - cy;
-  
+
     const dist = Math.sqrt(dx * dx + dy * dy);
     const maxDist = Math.sqrt(cx * cx + cy * cy);
-  
-    if (dist / maxDist < 0.1) { // ⭐ 从 0.2 改 0.1
+
+    if (dist / maxDist < 0.1) {
+      // ⭐ 从 0.2 改 0.1
       return TileType.Grass;
     }
-  
+
     // ===== 噪声 =====
-    const b = this.smoothNoise(x * cfg.scale.biome, y * cfg.scale.biome, 1);
-    const m = this.smoothNoise(x * cfg.scale.moisture, y * cfg.scale.moisture, 2);
-    const d = this.smoothNoise(x * cfg.scale.detail, y * cfg.scale.detail, 3);
-    const r = this.smoothNoise(x * cfg.scale.rock, y * cfg.scale.rock, 4);
-  
+    const b = this.smoothNoise(
+      x * cfg.scale.biome,
+      y * cfg.scale.biome,
+      1 + this.seed
+    );
+    const m = this.smoothNoise(
+      x * cfg.scale.moisture,
+      y * cfg.scale.moisture,
+      2 + this.seed
+    );
+    const d = this.smoothNoise(
+      x * cfg.scale.detail,
+      y * cfg.scale.detail,
+      3 + this.seed
+    );
+    const r = this.smoothNoise(
+      x * cfg.scale.rock,
+      y * cfg.scale.rock,
+      4 + this.seed
+    );
+
     // ===== 调试（可开）=====
     // if (x % 50 === 0 && y % 50 === 0) console.log("b:", b);
-  
+
     // ===== 规则驱动 =====
     for (let i = 0; i < this.terrainRules.length; i++) {
       const rule = this.terrainRules[i];
@@ -436,7 +465,7 @@ export class MapManager extends Component {
         return rule.type;
       }
     }
-  
+
     return TileType.Grass;
   }
   getNeighbors(x: number, y: number): TileType[] {
@@ -550,7 +579,7 @@ export class MapManager extends Component {
     if (!list || list.length === 0) return "";
 
     //  用坐标做“稳定随机”（保证同一格不会跳变）
-    const r = this.rand(x, y, 9999); // 0~1
+    const r = this.rand(x, y, 9999); // 0~1，用于权重随机
 
     let total = 0;
     for (let i = 0; i < list.length; i++) {
